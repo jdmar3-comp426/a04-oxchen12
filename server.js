@@ -36,12 +36,15 @@ app.get("/app/users", (req, res) => {
 
 // READ a single user (HTTP method GET) at endpoint /app/user/:id
 app.get("/app/user/:id", (req, res) => {
-	const stmt = db.prepare("SELECT * FROM userinfo WHERE id = ?");
-	const data = stmt.get(req.params.id);
-	res.status(200).json(data);
+	const stmt = db.prepare("SELECT * FROM userinfo WHERE id = ?").get(req.params.id);
+	res.status(200).json(stmt);
 });
 
 // UPDATE a single user (HTTP method PATCH) at endpoint /app/update/user/:id
+app.patch("/app/update/user/:id", (req, res) => {
+	const stmt = db.prepare("UPDATE userinfo SET user = COALESCE(?, user), pass = COALESCE(?, pass) WHERE id = ?").get(req.params.id);
+	res.status(200).json(stmt);
+});
 
 // DELETE a single user (HTTP method DELETE) at endpoint /app/delete/user/:id
 
